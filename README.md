@@ -2,7 +2,9 @@
 Créer un système simple de gestion de tickets
 
 Structure Collaborative
+
 tickets/
+
 ├── ticket.py        (Classe Ticket - Charles)
 
 ├── gestion.py       (CRUD tickets - Toleen)
