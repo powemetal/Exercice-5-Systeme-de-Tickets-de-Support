@@ -8,4 +8,11 @@ class Ticket:
         self.priorite = priorite
         
     def __str__(self):
-        return f"Ticket #{self.numero}, nom = {self.nom}, sujet = {self.sujet}, priorite = {self.priorite}"
+        return f"Ticket #{self.numero} nom={self.nom} sujet={self.sujet} priorite={self.priorite}"
+    
+# a = Ticket("Charles", "PROBLEME","1")
+# b = Ticket("Dharles", "PROBLEME","1")
+# c = Ticket("Eharles", "PROBLEME","1")
+# d = Ticket("Fharles", "PROBLEME","1")
+
+# print(d)
