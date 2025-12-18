@@ -12,22 +12,28 @@ class GestionTicket:
     def lire_tickets(self):
         return self.tickets
     
-    def mettre_a_jour(self, numero, nom=None, sujet=None, priorite=None):
+    def lire_ticket_par_id(self, numero):
         for ticket in self.tickets:
             if ticket.numero == numero:
-                if nom is not None:
-                    ticket.nom = nom
-                if sujet is not None:
-                    ticket.sujet = sujet
-                if priorite is not None:
-                    ticket.priorite = priorite
                 return ticket
+        return None
+    
+    def mettre_a_jour(self, numero, nom=None, sujet=None, priorite=None):
+        ticket = self.lire_ticket_par_id(numero)
+        if ticket is not None:
+            if nom is not None:
+                ticket.nom = nom
+            if sujet is not None:
+                ticket.sujet = sujet
+            if priorite is not None:
+                ticket.priorite = priorite
+            return ticket
         return None
 
 
     def supprimer_ticket(self, numero):
-        for ticket in self.tickets:
-            if ticket.numero == numero:
-                self.tickets.remove(ticket)
-                return True
+        ticket = self.lire_ticket_par_id(numero)
+        if ticket is not None:
+            self.tickets.remove(ticket)
+            return True
         return False
