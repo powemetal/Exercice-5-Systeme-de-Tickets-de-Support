@@ -11,7 +11,7 @@ def clear_screen():
     else:
         os.system("clear")
 
-dernier_message = ""
+entete = ""
 
 choix = ""
 menu_principal = """
@@ -35,56 +35,62 @@ Q- Menu principal
 while True:
     choix = ""
     clear_screen()
-    print(dernier_message)
+    print(entete)
     print(menu_principal)
     choix = input("\nEntrez un choix: ").lower()
     if choix == "1":
-        dernier_message = "-- Creation d'un Ticket --"
+        entete = "-- Creation d'un Ticket --"
         clear_screen()
-        print(f"{dernier_message}\n")
+        print(f"{entete}\n")
         nom, sujet, priorite = [input(prompt) for prompt in ("Entrez le nom de votre ticket: ", "Entrez le sujet de votre ticket: ", "Quelle est la prioritee?: ")]
         gestion.creer_ticket(nom, sujet, priorite)
-        dernier_message = f"Ticket: (#{Ticket.num} -Nom: {nom} -Sujet: {sujet} -Prioritée: {priorite}) créé"
+        entete = f"Ticket: (#{Ticket.num} -Nom: {nom} -Sujet: {sujet} -Prioritée: {priorite}) créé"
 
         # gestion.creer_ticket(nom, sujet, priorite)
 
     if choix == "2":
-        dernier_message = ""
+        entete = ""
         while True:
             choix_gestion = ""
             clear_screen()
-            print(dernier_message)
+            print(entete)
             print(menu_gestion)
             choix_gestion = input("\nEntrez un choix: ").lower()
             if choix_gestion == "1":
                 clear_screen()
-                dernier_message = "-- Voir les tickets --\n"
+                entete = "-- Voir les tickets --\n"
                 gestion.afficher_tickets()
                 input("\nAppuyez sur entree pour continuer")
 
             if choix_gestion == "2":
                 clear_screen()
-                dernier_message = "-- Voir un ticket --"
+                entete = "-- Voir un ticket --"
                 id_ticket = input("Entrez le numero du ticket: ")
-                print(gestion.afficher_ticket_par_id(int(id_ticket)))
+                print(f"\n{gestion.afficher_ticket_par_id(int(id_ticket))}")
                 input("\nAppuyez sur entree pour continuer")
 
 
             if choix_gestion == "3":
-                dernier_message = "Modifier un ticket"
+                entete = "-- Modifier un ticket --"
 
             if choix_gestion == "4":
-                dernier_message = "Supprimer un ticket"
+                entete = "Supprimer un ticket"
 
             if choix_gestion == "q":
-                dernier_message = ""
+                entete = ""
+            
+            else:
+                entete = "Votre choix est invalide, entrez un chiffre de 1 à 4 ou q-Q pour quitter"
                 break
 
 
     if choix == "3":
-        dernier_message = "Sauvegarder les Tickets"
+        entete = "Sauvegarder les Tickets"
 
     if choix == "q":
         break
+
+    else:
+        entete = "Votre choix est invalide, entrez un chiffre de 1 à 3 ou q-Q pour quitter"
 
 print("\nAu revoir")
