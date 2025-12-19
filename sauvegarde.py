@@ -1,11 +1,11 @@
 
 import json
 
-def sauvegarder(gestion_ticket, fichier="tickets.json"):
+def sauvegarder(gestion, fichier="tickets.json"):
     tickets = []
 
       # Transformer les tickets en dictionnaires
-    for t in gestion_ticket.lire_tickets():
+    for t in gestion.tickets:
         tickets.append({
             "numero": t.numero,
             "nom": t.nom,
@@ -19,7 +19,7 @@ def sauvegarder(gestion_ticket, fichier="tickets.json"):
     f.close()
 
 
-def charger(gestion_ticket, fichier="tickets.json"):
+def charger(gestion, fichier="tickets.json"):
         # Ouvrir le fichier en lecture
     f = open(fichier, "r")
     tickets = json.load(f)
@@ -27,7 +27,7 @@ def charger(gestion_ticket, fichier="tickets.json"):
 
         # Recréer les tickets
     for t in tickets:
-        gestion_ticket.creer_ticket(
+        gestion.creer_ticket(
             t["nom"],
             t["sujet"],
             t["priorite"]

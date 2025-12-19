@@ -3,10 +3,9 @@ import gestion
 import os
 import interface
 from ticket import Ticket
+import sauvegarde
+# import sauve
 
-a = gestion.creer_ticket("Affichage du site","Erreur 404","2")
-b = gestion.creer_ticket("Mauvais port","ERR_UNSAFE_PORT","2")
-c = gestion.creer_ticket("Souris qui ne bouge pas","Code 18","18")
 
 debug = False
 
@@ -21,10 +20,12 @@ def clear_screen():
     else:
         pass
 
-entete = ""
 choix = ""
 menu_principal = interface.menu_principal
 menu_gestion = interface.menu_gestion
+
+sauvegarde.charger(gestion)
+entete = "Chargement des Tickets completé"
 
 while True:
     choix = ""
@@ -51,7 +52,7 @@ while True:
 
         # gestion.creer_ticket(nom, sujet, priorite)
 
-    if choix == "2":
+    elif choix == "2":
         entete = ""
         while True:
             
@@ -59,6 +60,7 @@ while True:
             print(entete)
             print(menu_gestion)
             choix_gestion = input("\nEntrez un choix: ").lower()
+
             if choix_gestion == "1":
                 clear_screen()
                 print("-- Voir les tickets --\n")
@@ -89,7 +91,6 @@ while True:
                     else:
                         print("Ceci n'est pas une Entree valide")
                         input("Appuyez sur entree pour continuer")
-
                 if gestion.afficher_ticket_par_id(id_ticket) :
                     clear_screen()
                     print(f"{gestion.afficher_ticket_par_id(int(id_ticket))}\n")
@@ -137,7 +138,6 @@ while True:
                             
                         else:
                             entete = "Ce choix est invalide"
-
                         if ticket_modified:
                             clear_screen()
                             print("Acceptez vous les changements?: \n")
@@ -153,14 +153,37 @@ while True:
                                 clear_screen()
                                 print(f"{gestion.afficher_ticket_par_id(int(id_ticket))}\n")
                                 input("Changements annulés, appuyez sur enter pour continuer")
-
                 else:
                     entete = (f"Le ticket #{id_ticket} n'existe pas")
                 continue
 
             if choix_gestion == "4":
-                entete = "Supprimer un ticket"
+                id_a_supprimer = None
+                while not id_a_supprimer:
+                    clear_screen()
+                    print("-- Supprimer un ticket --")
+                    input_ticket_a_supprimer = input("\nEntrez le numero du ticket a supprimer: ")
+                    if input_ticket_a_supprimer.isdigit():
+                        id_a_supprimer = int(input_ticket_a_supprimer.strip())
+                    else:
+                        print("Ceci n'est pas une Entree valide")
+                        input("Appuyez sur entree pour continuer")
+                if gestion.afficher_ticket_par_id(id_a_supprimer) :
+                    clear_screen()
+                    print(f"{gestion.afficher_ticket_par_id(int(id_a_supprimer))}\n")
+                    print("Voulez vous modifier ce ticket?")
+                    decision = input("Entrez oui pour continuer: ").lower()
+                    if decision == "oui":
+                        clear_screen()
+                        gestion.supprimer_ticket(id_a_supprimer)
+                        input("Appuyez sur enter pour continuer")
+                    else:
+                        print("Suppression annulee")
+                        input("Appuyez sur enter pour continuer")
+                else:
+                    entete = entete = (f"Le ticket #{id_a_supprimer} n'existe pas")
                 continue
+
             if choix_gestion == "q":
                 entete = ""
                 break
@@ -168,11 +191,15 @@ while True:
                 entete = "Votre choix est invalide, entrez un chiffre de 1 à 4 ou q-Q pour quitter"
         continue        
 
+    elif choix == "3":
+        entete = "Sauvegarde des Tickets completée"
+        sauvegarde.sauvegarder(gestion)
 
-    if choix == "3":
-        entete = "Sauvegarder les Tickets"
+    elif choix == "4":
+        entete = "Chargement des Tickets completé"
+        sauvegarde.charger(gestion)
 
-    if choix == "q":
+    elif choix == "q":
         break
 
     else:

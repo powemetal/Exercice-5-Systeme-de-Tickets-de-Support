@@ -3,6 +3,7 @@ menu_principal = """
 1- Créer un Ticket
 2- Gestion des Tickets
 3- Sauvegarder les Tickets
+4- Charger les Tickets
 
 Q- Quitter l'application"""
 
