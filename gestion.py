@@ -1,39 +1,49 @@
 from ticket import Ticket
 
-class GestionTicket:
-    def __init__(self):
-        self.tickets = []
 
-    def creer_ticket(self, nom, sujet, priorite):
-        nouveau_ticket = Ticket(nom, sujet, priorite)
-        self.tickets.append(nouveau_ticket)
-        return nouveau_ticket
-    
-    def lire_tickets(self):
-        return self.tickets
-    
-    def lire_ticket_par_id(self, numero):
-        for ticket in self.tickets:
-            if ticket.numero == numero:
-                return ticket
-        return None
-    
-    def mettre_a_jour(self, numero, nom=None, sujet=None, priorite=None):
-        ticket = self.lire_ticket_par_id(numero)
-        if ticket is not None:
-            if nom is not None:
-                ticket.nom = nom
-            if sujet is not None:
-                ticket.sujet = sujet
-            if priorite is not None:
-                ticket.priorite = priorite
+tickets = []
+
+def creer_ticket(nom, sujet, priorite):
+    nouveau_ticket = Ticket(nom, sujet, priorite)
+    tickets.append(nouveau_ticket)
+
+def afficher_tickets():
+    for ticket in tickets:
+        print(ticket)
+
+def afficher_ticket_par_id(numero):
+    for ticket in tickets:
+        if ticket.numero == numero:
             return ticket
-        return None
 
+def mettre_a_jour(numero, nom=None, sujet=None, priorite=None):
+    ticket = afficher_ticket_par_id(numero)
+    if ticket is not None:
+        if nom is not None:
+            ticket.nom = nom
+        if sujet is not None:
+            ticket.sujet = sujet
+        if priorite is not None:
+            ticket.priorite = priorite
+        print("Succes de la mise a jour des informations!")
+    else:
+        print("Erreur de la mise a jour des informations!")
 
-    def supprimer_ticket(self, numero):
-        ticket = self.lire_ticket_par_id(numero)
-        if ticket is not None:
-            self.tickets.remove(ticket)
-            return True
-        return False
+def supprimer_ticket(numero):
+    ticket = afficher_ticket_par_id(numero)
+    if ticket is not None:
+        tickets.remove(ticket)
+        print("Ticket supprime!")
+    else:
+        print("Erreur de suppression")
+
+# a = creer_ticket("to","tr","2")
+# a = creer_ticket("fdds","qq","2")
+# a = creer_ticket("dsf","ww","2")
+# a = creer_ticket("555","ee","2")
+# afficher_tickets()
+# print(afficher_ticket_par_id(3))
+# mettre_a_jour(3, "Toleen", "rien", "2")
+# print(afficher_ticket_par_id(3))
+# supprimer_ticket(3)
+# afficher_tickets()
