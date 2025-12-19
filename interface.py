@@ -3,17 +3,23 @@ import os
 import gestion
 from ticket import Ticket
 
+debug = False
+
 def clear_screen():
     # Windows
-    if os.name == "nt":
-        os.system("cls")
-    # Linux / macOS
+    if  not debug:
+        if os.name == "nt":
+            os.system("cls")
+        # Linux / macOS
+        else:
+            os.system("clear")
     else:
-        os.system("clear")
+        pass
 
 entete = ""
 
 choix = ""
+
 menu_principal = """
 === Bienvenue dans le systeme de gestion de tickets ===
 1- Créer un Ticket
@@ -27,7 +33,7 @@ menu_gestion = """
 -- Gestion des Tickets --
 1- Voir les tickets
 2- Voir un ticket
-3- Changer l'etat d'un ticket
+3- Mettre a jour un ticket
 4- Supprimer un ticket
 
 Q- Menu principal
@@ -42,7 +48,16 @@ while True:
         entete = "-- Creation d'un Ticket --"
         clear_screen()
         print(f"{entete}\n")
-        nom, sujet, priorite = [input(prompt) for prompt in ("Entrez le nom de votre ticket: ", "Entrez le sujet de votre ticket: ", "Quelle est la prioritee?: ")]
+        nom, sujet, priorite = "", "", ""
+        while nom == "":
+            clear_screen()
+            nom = input("Entrez le nom de votre ticket: ")
+        while sujet == "":
+            clear_screen()
+            sujet = input("Entrez le sujet de votre ticket: ")
+        while priorite == "":
+            clear_screen()
+            priorite = input("Quelle est la prioritee?: ")
         gestion.creer_ticket(nom, sujet, priorite)
         entete = f"Ticket: (#{Ticket.num} -Nom: {nom} -Sujet: {sujet} -Prioritée: {priorite}) créé"
 
@@ -51,37 +66,110 @@ while True:
     if choix == "2":
         entete = ""
         while True:
-            choix_gestion = ""
+            
             clear_screen()
             print(entete)
             print(menu_gestion)
             choix_gestion = input("\nEntrez un choix: ").lower()
             if choix_gestion == "1":
                 clear_screen()
-                entete = "-- Voir les tickets --\n"
+                print("-- Voir les tickets --\n")
                 gestion.afficher_tickets()
                 input("\nAppuyez sur entree pour continuer")
+                entete = ""
+                continue
 
             if choix_gestion == "2":
                 clear_screen()
-                entete = "-- Voir un ticket --"
+                print("-- Voir un ticket --\n")
                 id_ticket = input("Entrez le numero du ticket: ")
                 print(f"\n{gestion.afficher_ticket_par_id(int(id_ticket))}")
                 input("\nAppuyez sur entree pour continuer")
+                entete = ""
+                continue
 
 
             if choix_gestion == "3":
-                entete = "-- Modifier un ticket --"
+                clear_screen()
+                print("-- Mettre a jour un ticket --\n")
+                id_ticket = input("Entrez le numero du ticket a mettre a jour: ")
+                if gestion.afficher_ticket_par_id(int(id_ticket)) :
+                    clear_screen()
+                    print("\nVoulez vous modifier ce ticket?")
+                    print(f"\n{gestion.afficher_ticket_par_id(int(id_ticket))}\n")
+                    decision = input("Entrez oui pour continuer: ").lower()
+                    if decision == "oui":
+                        clear_screen()
+                        print("\nQuelle partie du ticket voulez vous modifier?\n")
+                        partie_a_modifier = input("Entrez Votre Choix: N pour nom - S pour sujet - P pour prioritée: )").lower()
+                        ticket_a_modifier = gestion.afficher_ticket_par_id(int(id_ticket))
+                        nom = ticket_a_modifier.nom
+                        sujet = ticket_a_modifier.sujet
+                        priorite = ticket_a_modifier.priorite
+                        ticket_modified = 0
+                        if partie_a_modifier == "n":
+                            input_nom = ""
+                            while input_nom == "":
+                                clear_screen()
+                                input_nom = input("Entrez le nouveau nom: ")
+                                ticket_modified = 1
+                                if input_nom:
+                                    nom = input_nom
+                            
+                        elif partie_a_modifier == "s":
+                            input_sujet = ""
+                            while input_sujet == "":
+                                clear_screen()
+                                input_sujet = input("Entrez le nouveau sujet: ")
+                                ticket_modified = 1
+                                if input_sujet:
+                                    sujet = input_sujet
+                            
+                        elif partie_a_modifier == "p":
+                            while input_priorite == "":
+                                clear_screen()
+                                input_priorite = input("Entrez la nouvelle prioritée: ")
+                                ticket_modified = 1
+                                if input_priorite:
+                                    priorite = input_priorite
+                            
+                        else:
+                            entete = "Ce choix est invalide"
+
+                        if ticket_modified:
+                            clear_screen()
+                            print("Acceptez vous les changements?: \n")
+                            print(f"Ancien ticket:  {gestion.afficher_ticket_par_id(int(id_ticket))}")
+                            print(f"Nouveau ticket: Ticket #{ticket_a_modifier.numero} nom={nom} sujet={sujet} priorite={priorite}\n")
+                            confirmation_changements = input("Entrez oui pour confirmer les changements: ").lower()
+                            if confirmation_changements == "oui":
+                                clear_screen()
+                                gestion.mettre_a_jour(int(id_ticket), nom, sujet, priorite)
+                                print(f"{gestion.afficher_ticket_par_id(int(id_ticket))}\n")
+                                input("Appuyez sur enter pour continuer")
+                            else:
+                                clear_screen()
+                                print(f"{gestion.afficher_ticket_par_id(int(id_ticket))}\n")
+                                input("Changements annulés, appuyez sur enter pour continuer")
+
+                else:
+                    entete = (f"Le ticket #{id_ticket} n'existe pas")
+
+
+                continue
 
             if choix_gestion == "4":
                 entete = "Supprimer un ticket"
+                continue
 
             if choix_gestion == "q":
                 entete = ""
+                break
             
             else:
                 entete = "Votre choix est invalide, entrez un chiffre de 1 à 4 ou q-Q pour quitter"
-                break
+
+                
 
 
     if choix == "3":
